@@ -1,2 +1,2 @@
 # cpp
-Code inspired by Stroustrups
+Code inspired by Stroustrup
