@@ -54,6 +54,13 @@ TEST_TARGET=$(BINDIR)/test.app
 .PHONY: all check clean
 
 all: $(TARGET)
+	@mkdir -p $(BINDIR)
+	@mkdir -p $(BUILDDIR)
+	@mkdir -p $(INCLUDE)
+	@mkdir -p $(LIB)
+	@mkdir -p $(MAINDIR)
+	@mkdir -p $(SRCDIR)
+	@mkdir -p $(TESTDIR)
 
 check: $(TEST_TARGET)
 	./$(TEST_TARGET) $(TESTFLAGS)

@@ -8,8 +8,8 @@ empty/
 ├── .gitignore              # files to ignore from adding to the git repo
 ├── Makefile                # make file -- run make or make check or make clean
 ├── bin                     # binary files, like executables
-│   ├── <project>.app		# runs the program
-│   └── test.app			# runs the tests
+│   ├── <project>.app       # runs the program
+│   └── test.app            # runs the tests
 ├── build                   # build output filrs, like object files
 ├── include                 # project include files
 │   └── catch.hpp           # catch 2 test framework -- everything is in one header file
