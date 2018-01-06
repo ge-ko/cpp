@@ -18,15 +18,15 @@ struct type_name
     }
 };
 
-#define FUNDAMENTIAL_TYPE_NAME(type)								\
-template<>															\
-struct type_name<type>												\
-{																	\
-    friend std::ostream& operator<<(std::ostream& os, type_name)	\
-    {																\
-        os << #type;												\
-        return os;													\
-    }																\
+#define FUNDAMENTIAL_TYPE_NAME(type)                                        \
+template<>                                                                  \
+struct type_name<type>                                                      \
+{                                                                           \
+    friend std::ostream& operator<<(std::ostream& os, type_name)            \
+    {                                                                       \
+        os << #type;                                                        \
+        return os;                                                          \
+    }                                                                       \
 }
 
 FUNDAMENTIAL_TYPE_NAME(void);
@@ -53,19 +53,19 @@ FUNDAMENTIAL_TYPE_NAME(long double);
 //* COMPOUND TYPES
 //************************
 
-#define COMPOUND_TYPE_NAME_DELIMITED(delimiter, type_modifier)		\
-template<typename T>												\
-struct type_name<T type_modifier>									\
-{																	\
-    friend std::ostream& operator<<(std::ostream& os, type_name)	\
-    {																\
-        os << type_name<T>();										\
-        os << delimiter << #type_modifier;							\
-        return os;													\
-    }																\
+#define COMPOUND_TYPE_NAME_DELIMITED(delimiter, type_modifier)              \
+template<typename T>                                                        \
+struct type_name<T type_modifier>                                           \
+{                                                                           \
+    friend std::ostream& operator<<(std::ostream& os, type_name)            \
+    {                                                                       \
+        os << type_name<T>();                                               \
+        os << delimiter << #type_modifier;                                  \
+        return os;                                                          \
+    }                                                                       \
 }
 
-#define COMPOUND_TYPE_NAME(type_modifier) \
+#define COMPOUND_TYPE_NAME(type_modifier)                                   \
     COMPOUND_TYPE_NAME_DELIMITED("", type_modifier)
 
 // ARRAYS
@@ -105,16 +105,16 @@ struct type_name<R(Args...)>
     }
 };
 
-#define FUNCTION_CVR_TYPE_NAME(cvr)									\
-template<typename R, typename... Args>								\
-struct type_name<R(Args...) cvr>									\
-{																	\
-    friend std::ostream& operator<<(std::ostream& os, type_name)	\
-    {																\
-        os << type_name<R(Args...)>();								\
-        os << " " << #cvr;											\
-        return os;													\
-    }																\
+#define FUNCTION_CVR_TYPE_NAME(cvr)                                         \
+template<typename R, typename... Args>                                      \
+struct type_name<R(Args...) cvr>                                            \
+{                                                                           \
+    friend std::ostream& operator<<(std::ostream& os, type_name)            \
+    {                                                                       \
+        os << type_name<R(Args...)>();                                      \
+        os << " " << #cvr;                                                  \
+        return os;                                                          \
+    }                                                                       \
 }
 
 FUNCTION_CVR_TYPE_NAME(const);
@@ -130,40 +130,40 @@ FUNCTION_CVR_TYPE_NAME(volatile &&);
 FUNCTION_CVR_TYPE_NAME(const volatile &&);
 
 // POINTER TO FUNCTION, REF TO FUNCTION
-#define FUNCTION_PR_TYPE_NAME(pr)									\
-template<typename R, typename... Args>								\
-struct type_name<R(pr)(Args...)>									\
-{																	\
-    friend std::ostream& operator<<(std::ostream& os, type_name)	\
-    {																\
-        os << type_name<R>();										\
-        os << "(" << #pr << ")";									\
-        os << "(" << type_name<Args...>() << ")";					\
-        return os;													\
-    }																\
+#define FUNCTION_PR_TYPE_NAME(pr)                                           \
+template<typename R, typename... Args>                                      \
+struct type_name<R(pr)(Args...)>                                            \
+{                                                                           \
+    friend std::ostream& operator<<(std::ostream& os, type_name)            \
+    {                                                                       \
+        os << type_name<R>();                                               \
+        os << "(" << #pr << ")";                                            \
+        os << "(" << type_name<Args...>() << ")";                           \
+        return os;                                                          \
+    }                                                                       \
 }
 
-FUNCTION_PR_TYPE_NAME(*);	// function pointer
+FUNCTION_PR_TYPE_NAME(*);    // function pointer
 FUNCTION_PR_TYPE_NAME(* const);
 FUNCTION_PR_TYPE_NAME(* volatile);
 FUNCTION_PR_TYPE_NAME(* const volatile);
-FUNCTION_PR_TYPE_NAME(&);	// function lvalue reference
-FUNCTION_PR_TYPE_NAME(&&);	// function rvalue reference
+FUNCTION_PR_TYPE_NAME(&);    // function lvalue reference
+FUNCTION_PR_TYPE_NAME(&&);    // function rvalue reference
 
 // function with mix of plain and variardic arguments
 
-#define FUNCTION_MIX_CVR_TYPE_NAME(cvr)								\
-template<typename R, typename... Args>								\
-struct type_name<R(Args..., ...) cvr>								\
-{																	\
-    friend std::ostream& operator<<(std::ostream& os, type_name)	\
-    {																\
-        os << type_name<R>();										\
-        os << "(" << type_name<Args...>() <<  ", ...)";				\
-        if (!std::string(#cvr).empty()) { os << " "; }				\
-        os << #cvr;													\
-        return os;													\
-    }																\
+#define FUNCTION_MIX_CVR_TYPE_NAME(cvr)                                     \
+template<typename R, typename... Args>                                      \
+struct type_name<R(Args..., ...) cvr>                                       \
+{                                                                           \
+    friend std::ostream& operator<<(std::ostream& os, type_name)            \
+    {                                                                       \
+        os << type_name<R>();                                               \
+        os << "(" << type_name<Args...>() <<  ", ...)";                     \
+        if (!std::string(#cvr).empty()) { os << " "; }                      \
+        os << #cvr;                                                         \
+        return os;                                                          \
+    }                                                                       \
 }
 
 FUNCTION_MIX_CVR_TYPE_NAME();
@@ -179,39 +179,39 @@ FUNCTION_MIX_CVR_TYPE_NAME(const &&);
 FUNCTION_MIX_CVR_TYPE_NAME(volatile &&);
 FUNCTION_MIX_CVR_TYPE_NAME(const volatile &&);
 
-#define FUNCTION_PR_MIX_TYPE_NAME(pr)								\
-template<typename R, typename... Args>								\
-struct type_name<R(pr)(Args..., ...)>								\
-{																	\
-    friend std::ostream& operator<<(std::ostream& os, type_name)	\
-    {																\
-        os << type_name<R>();										\
-        os << "(" << #pr << ")";									\
-        os << "(" << type_name<Args...>() <<  ", ...)";				\
-        return os;													\
-    }																\
+#define FUNCTION_PR_MIX_TYPE_NAME(pr)                                       \
+template<typename R, typename... Args>                                      \
+struct type_name<R(pr)(Args..., ...)>                                       \
+{                                                                           \
+    friend std::ostream& operator<<(std::ostream& os, type_name)            \
+    {                                                                       \
+        os << type_name<R>();                                               \
+        os << "(" << #pr << ")";                                            \
+        os << "(" << type_name<Args...>() <<  ", ...)";                     \
+        return os;                                                          \
+    }                                                                       \
 }
 
-FUNCTION_PR_MIX_TYPE_NAME(*);	// function pointer
+FUNCTION_PR_MIX_TYPE_NAME(*);    // function pointer
 FUNCTION_PR_MIX_TYPE_NAME(* const);
 FUNCTION_PR_MIX_TYPE_NAME(* volatile);
 FUNCTION_PR_MIX_TYPE_NAME(* const volatile);
-FUNCTION_PR_MIX_TYPE_NAME(&);	// function lvalue reference
-FUNCTION_PR_MIX_TYPE_NAME(&&);	// function rvalue reference
+FUNCTION_PR_MIX_TYPE_NAME(&);    // function lvalue reference
+FUNCTION_PR_MIX_TYPE_NAME(&&);    // function rvalue reference
 
 // function with variardic arguments
-#define FUNCTION_VAR_TYPE_NAME(cvr)									\
-template<typename R>												\
-struct type_name<R(...) cvr>										\
-{																	\
-    friend std::ostream& operator<<(std::ostream& os, type_name)	\
-    {																\
-        os << type_name<R>();										\
-        os << "(...)";												\
-        if (!std::string(#cvr).empty()) { os << " "; }				\
-        os << #cvr;													\
-        return os;													\
-    }																\
+#define FUNCTION_VAR_TYPE_NAME(cvr)                                         \
+template<typename R>                                                        \
+struct type_name<R(...) cvr>                                                \
+{                                                                           \
+    friend std::ostream& operator<<(std::ostream& os, type_name)            \
+    {                                                                       \
+        os << type_name<R>();                                               \
+        os << "(...)";                                                      \
+        if (!std::string(#cvr).empty()) { os << " "; }                      \
+        os << #cvr;                                                         \
+        return os;                                                          \
+    }                                                                       \
 }
 
 FUNCTION_VAR_TYPE_NAME();
@@ -228,40 +228,40 @@ FUNCTION_VAR_TYPE_NAME(volatile &&);
 FUNCTION_VAR_TYPE_NAME(const volatile &&);
 
 // function with variardic arguments
-#define FUNCTION_PR_VAR_TYPE_NAME(pr)								\
-template<typename R>												\
-struct type_name<R(pr)(...)>										\
-{																	\
-    friend std::ostream& operator<<(std::ostream& os, type_name)	\
-    {																\
-        os << type_name<R>();										\
-        os << "(" << #pr << ")";									\
-        os << "(...)";												\
-        return os;													\
-    }																\
+#define FUNCTION_PR_VAR_TYPE_NAME(pr)                                       \
+template<typename R>                                                        \
+struct type_name<R(pr)(...)>                                                \
+{                                                                           \
+    friend std::ostream& operator<<(std::ostream& os, type_name)            \
+    {                                                                       \
+        os << type_name<R>();                                               \
+        os << "(" << #pr << ")";                                            \
+        os << "(...)";                                                      \
+        return os;                                                          \
+    }                                                                       \
 }
 
-FUNCTION_PR_VAR_TYPE_NAME(*);	// function pointer
+FUNCTION_PR_VAR_TYPE_NAME(*);    // function pointer
 FUNCTION_PR_VAR_TYPE_NAME(* const);
 FUNCTION_PR_VAR_TYPE_NAME(* volatile);
 FUNCTION_PR_VAR_TYPE_NAME(* const volatile);
-FUNCTION_PR_VAR_TYPE_NAME(&);	// function lvalue reference
-FUNCTION_PR_VAR_TYPE_NAME(&&);	// function rvalue reference
+FUNCTION_PR_VAR_TYPE_NAME(&);    // function lvalue reference
+FUNCTION_PR_VAR_TYPE_NAME(&&);    // function rvalue reference
 
 // function pointer to member
-#define FUNCTION_CLASS_PTR_TYPE_NAME(p, cvr)						\
-template<typename R, typename C, typename... Args>					\
-struct type_name<R(C:: p)(Args...) cvr>								\
-{																	\
-    friend std::ostream& operator<<(std::ostream& os, type_name)	\
-    {																\
-        os << type_name<R>();										\
-        os << "(" << type_name<C>() << "::" << #p << ")";			\
-        os << "(" << type_name<Args...>() << ")";					\
-        if (!std::string(#cvr).empty()) { os << " "; }				\
-        os << #cvr;													\
-        return os;													\
-    }																\
+#define FUNCTION_CLASS_PTR_TYPE_NAME(p, cvr)                                \
+template<typename R, typename C, typename... Args>                          \
+struct type_name<R(C:: p)(Args...) cvr>                                     \
+{                                                                           \
+    friend std::ostream& operator<<(std::ostream& os, type_name)            \
+    {                                                                       \
+        os << type_name<R>();                                               \
+        os << "(" << type_name<C>() << "::" << #p << ")";                   \
+        os << "(" << type_name<Args...>() << ")";                           \
+        if (!std::string(#cvr).empty()) { os << " "; }                      \
+        os << #cvr;                                                         \
+        return os;                                                          \
+    }                                                                       \
 }
 
 FUNCTION_CLASS_PTR_TYPE_NAME(*,);
@@ -317,19 +317,19 @@ FUNCTION_CLASS_PTR_TYPE_NAME(* const volatile, volatile &&);
 FUNCTION_CLASS_PTR_TYPE_NAME(* const volatile, const volatile &&);
 
 // function pointer to member, mixed args
-#define FUNCTION_CLASS_PTR_MIX_TYPE_NAME(p, cvr)					\
-template<typename R, typename C, typename... Args>					\
-struct type_name<R(C:: p)(Args..., ...) cvr>						\
-{																	\
-    friend std::ostream& operator<<(std::ostream& os, type_name)	\
-    {																\
-        os << type_name<R>();										\
-        os << "(" << type_name<C>() << "::" << #p << ")";			\
-        os << "(" << type_name<Args...>()  <<  ", ...)";			\
-        if (!std::string(#cvr).empty()) { os << " "; }				\
-        os << #cvr;													\
-        return os;													\
-    }																\
+#define FUNCTION_CLASS_PTR_MIX_TYPE_NAME(p, cvr)                            \
+template<typename R, typename C, typename... Args>                          \
+struct type_name<R(C:: p)(Args..., ...) cvr>                                \
+{                                                                           \
+    friend std::ostream& operator<<(std::ostream& os, type_name)            \
+    {                                                                       \
+        os << type_name<R>();                                               \
+        os << "(" << type_name<C>() << "::" << #p << ")";                   \
+        os << "(" << type_name<Args...>()  <<  ", ...)";                    \
+        if (!std::string(#cvr).empty()) { os << " "; }                      \
+        os << #cvr;                                                         \
+        return os;                                                          \
+    }                                                                       \
 }
 
 FUNCTION_CLASS_PTR_MIX_TYPE_NAME(*,);
@@ -385,19 +385,19 @@ FUNCTION_CLASS_PTR_MIX_TYPE_NAME(* const volatile, volatile &&);
 FUNCTION_CLASS_PTR_MIX_TYPE_NAME(* const volatile, const volatile &&);
 
 // function pointer to member, variadic args
-#define FUNCTION_CLASS_PTR_VAR_TYPE_NAME(p, cvr)					\
-template<typename R, typename C>									\
-struct type_name<R(C:: p)(...) cvr>									\
-{																	\
-    friend std::ostream& operator<<(std::ostream& os, type_name)	\
-    {																\
-        os << type_name<R>();										\
-        os << "(" << type_name<C>() << "::" << #p << ")";			\
-        os << "(...)";												\
-        if (!std::string(#cvr).empty()) { os << " "; }				\
-        os << #cvr;													\
-        return os;													\
-    }																\
+#define FUNCTION_CLASS_PTR_VAR_TYPE_NAME(p, cvr)                            \
+template<typename R, typename C>                                            \
+struct type_name<R(C:: p)(...) cvr>                                         \
+{                                                                           \
+    friend std::ostream& operator<<(std::ostream& os, type_name)            \
+    {                                                                       \
+        os << type_name<R>();                                               \
+        os << "(" << type_name<C>() << "::" << #p << ")";                   \
+        os << "(...)";                                                      \
+        if (!std::string(#cvr).empty()) { os << " "; }                      \
+        os << #cvr;                                                         \
+        return os;                                                          \
+    }                                                                       \
 }
 
 FUNCTION_CLASS_PTR_VAR_TYPE_NAME(*,);
