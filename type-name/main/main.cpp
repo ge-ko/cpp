@@ -88,7 +88,7 @@ struct type_name<Arg, Args...>
 {
     friend std::ostream& operator<<(std::ostream& os, type_name)
     {
-        os << type_name<Arg>() << "A, " << type_name<Args...>();
+        os << type_name<Arg>() << ", " << type_name<Args...>();
         return os;
     }
 };
@@ -492,10 +492,6 @@ struct type_name<C>
         if (std::is_union<C>::value) {
             os << "union";
         }
-        else if (std::is_function<C>::value)
-        {
-            os << "class()";
-        }
         else if (std::is_enum<C>::value)
         {
             os << "enum";
@@ -547,6 +543,10 @@ enum smallenum: int16_t
 
 template <typename T>
 struct t_s {};
+
+struct fn {
+    int operator()(int) { return 0; };
+};
 
 int main()
 {
@@ -616,6 +616,12 @@ int main()
                                     int, ...)
         const volatile &&
     >();
+
+    auto it = std::map<std::string, int>::const_reverse_iterator();
+    print<decltype(it)>();
+
+    auto lambda = [](){};
+    print<decltype(lambda)>();
 
     return 0;
 }
