@@ -1,5 +1,4 @@
 #include "catch.hpp"
-#include <iostream>
 #include "sort.hpp"
 
 TEST_CASE("Empty vector is sorted", "[insertion_sort]")
@@ -18,7 +17,7 @@ TEST_CASE("One element is always sorted", "[insertion_sort]")
     REQUIRE(in == out);
 }
 
-TEST_CASE("Two elements ordered ascending is sorted", "[insertion_sort]")
+TEST_CASE("Two elements ordered ascending are sorted", "[insertion_sort]")
 {
     std::vector<int> in {1, 2};
     std::vector<int> out {1, 2};
@@ -50,14 +49,14 @@ struct Int
 
     Int& operator=(Int const& r)
     {
-        ++assignment_count;
+        ++_assignment_count;
         value = r.value;
         return *this;
     }
 
     bool operator<(Int const& r) const
     {
-        ++comparison_count;
+        ++_comparison_count;
         return value < r.value;
     }
 
@@ -71,16 +70,27 @@ struct Int
         os << i.value;
         return os;
     }
+
+    static uint comparison_count()
+    {
+        return _comparison_count.load();
+    }
+
+    static uint assignment_count()
+    {
+        return _assignment_count.load();
+    }
     
+private:
     int value;
-    static int comparison_count;
-    static int assignment_count;
+    static std::atomic<uint> _comparison_count;
+    static std::atomic<uint> _assignment_count;
 };
 
-int Int::assignment_count = 0;
-int Int::comparison_count = 0;
+std::atomic<uint> Int::_assignment_count {0};
+std::atomic<uint> Int::_comparison_count {0};
 
-Int operator ""_i(unsigned long long i)
+Int operator""_i(unsigned long long i)
 {
     return Int(i);
 }
@@ -92,6 +102,6 @@ TEST_CASE("Complexity of insertion sort is quadratic")
     insertion_sort<Int>(in);
     REQUIRE(in == out);
     std::size_t n = in.size();
-    REQUIRE(Int::comparison_count == n*(n-1)/2);
-    REQUIRE(Int::assignment_count == n*(n-1));
+    REQUIRE(Int::comparison_count() == n*(n-1)/2);
+    REQUIRE(Int::assignment_count() == n*(n-1));
 }
