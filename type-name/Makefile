@@ -23,7 +23,7 @@ SHELL=/bin/sh
 .SUFFIXES:
 .SUFFIXES: .cpp .h .hpp .o
 CC=g++
-CFLAGS=-g -std=c++11 -Wall -pedantic
+CFLAGS=-g -std=c++17 -Wall -pedantic
 LDFLAGS=
 TESTFLAGS=--reporter compact --success
 SRCEXT=cpp

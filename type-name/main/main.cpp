@@ -571,6 +571,7 @@ int main()
     print<int(int) const>();
     print<int(int) volatile>();
     print<int(int) const volatile>();
+    //http://codexpert.ro/blog/2014/10/17/c-gems-ref-qualifiers/
     print<int(int) const &>();
     print<int(int) volatile &>();
     print<int(int) const volatile &>();
@@ -620,8 +621,10 @@ int main()
     auto it = std::map<std::string, int>::const_reverse_iterator();
     print<decltype(it)>();
 
-    auto lambda = [](){};
+    auto lambda = []() mutable -> int { return 0; };
     print<decltype(lambda)>();
+
+    print< std::map<int, decltype(lambda)> >();
 
     return 0;
 }
